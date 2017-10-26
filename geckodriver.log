@@ -1,0 +1,30 @@
+1508941595081	geckodriver	INFO	geckodriver 0.19.0
+1508941595097	geckodriver	INFO	Listening on 127.0.0.1:35613
+1508941596511	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.cnup6DJeLpwi"
+1508941597347	addons.xpi	WARN	Error parsing extensions state: [Exception... "Component returned failure code: 0x80520012 (NS_ERROR_FILE_NOT_FOUND) [amIAddonManagerStartup.readStartupData]"  nsresult: "0x80520012 (NS_ERROR_FILE_NOT_FOUND)"  location: "JS frame :: resource://gre/modules/addons/XPIProvider.jsm :: loadExtensionState :: line 1554"  data: no] Stack trace: loadExtensionState()@resource://gre/modules/addons/XPIProvider.jsm:1554 < getInstallState()@resource://gre/modules/addons/XPIProvider.jsm:1589 < checkForChanges()@resource://gre/modules/addons/XPIProvider.jsm:3109 < startup()@resource://gre/modules/addons/XPIProvider.jsm:2188 < callProvider()@resource://gre/modules/AddonManager.jsm:269 < _startProvider()@resource://gre/modules/AddonManager.jsm:739 < startup()@resource://gre/modules/AddonManager.jsm:906 < startup()@resource://gre/modules/AddonManager.jsm:3090 < observe()@jar:file:///usr/lib/firefox/omni.ja!/components/addonManager.js:65
+1508941598904	Marionette	INFO	Enabled via --marionette
+
+(firefox:15419): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:15419): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(firefox:15419): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:15419): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:15470): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:15470): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:15470): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:15470): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+1508941606075	Marionette	INFO	Listening on port 35025
+1508941606180	Marionette	WARN	TLS certificate errors will be ignored for this session
+1508941606412	Marionette	DEBUG	Register listener.js for window 2147483649
+1508941606549	Marionette	DEBUG	Received DOM event "beforeunload" for "about:blank"
+1508941606612	Marionette	DEBUG	Received DOM event "pagehide" for "about:blank"
+1508941606613	Marionette	DEBUG	Received DOM event "unload" for "about:blank"
+1508941606651	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://localhost:8000/"
+1508941606697	Marionette	DEBUG	Received DOM event "pageshow" for "http://localhost:8000/"
+1508941607286	Marionette	INFO	New connections will no longer be accepted
