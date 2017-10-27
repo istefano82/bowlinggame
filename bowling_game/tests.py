@@ -1,27 +1,29 @@
 import bowling_game.bowl_game as bowlgame
-import random # used in mock object
+import random  # used in mock object
 import unittest
 from unittest import mock
 
 
 class TestBowlGame(unittest.TestCase):
+
     def setUp(self):
+        self.maxDiff = 1553
         self.new_game = bowlgame.BowlGameSimulator()
 
     def test_initial_game_state(self):
         """Test initial game state is properly set."""
         self.assertEqual(self.new_game.game_state, {
-        'Frame_4': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_6': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_8': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_9': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_2': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_5': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_7': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_10': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
-                         )
+            'Frame_4': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_6': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_8': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_9': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_2': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_5': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_7': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_10': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
+            )
         self.assertEqual(self.new_game.current_frame, 1)
         self.assertEqual(self.new_game.current_roll, 1)
         self.assertEqual(self.new_game.pins_remaining, 10)
@@ -62,9 +64,9 @@ class TestBowlGame(unittest.TestCase):
          _update_game_state is called for the first roll in the frame.
          """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 3, 'frame_score': 3}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 3, 'frame_score': 3}}
         self.new_game._update_game_state(pins_down=3)
 
         self.assertEqual(self.new_game.current_frame, 1)
@@ -77,9 +79,11 @@ class TestBowlGame(unittest.TestCase):
          _update_game_state is called for the second roll in the frame.
          """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 3, 'frame_score': 3}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 3, 'frame_score': 3},
+            'Frame_2': None}
         expected_state = {
-        'Frame_1': {'roll_2': 4, 'roll_1': 3, 'frame_score': 7}}
+            'Frame_1': {'roll_2': 4, 'roll_1': 3, 'frame_score': 7},
+            'Frame_2': None}
         self.new_game.current_frame = 1
         self.new_game.current_roll = 2
         self.new_game.pins_remaining = 7
@@ -94,36 +98,35 @@ class TestBowlGame(unittest.TestCase):
             mocked_simulator.assert_called_once_with()
 
     def test_update_game_state_frame_last_frame_last_roll(self):
-        """Test game finishes when the last roll is performed and it is reinitilized to start state"""
+        """Test game finishes when the last roll is performed and it is
+
+        reinitilized to start state.
+        """
         self.new_game.game_state = {
-        'Frame_10': {'roll_2': 4, 'roll_1': 3, 'frame_score': 7}}
+            'Frame_10': {'roll_2': 4, 'roll_1': 3, 'frame_score': 7}}
         expected_state = {
-        'Frame_4': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_6': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_8': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_9': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_2': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_5': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_7': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_10': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
-        'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
+            'Frame_4': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_1': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_6': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_8': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_9': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_2': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_5': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_7': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_10': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0},
+            'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
 
         self.new_game.current_frame = 10
         self.new_game.current_roll = 2
         self.new_game.pins_remaining = 10
-        with mock.patch.object(bowlgame.BowlGameSimulator,
-                               '_recalculate_frame_scores') as mocked_simulator:
-            self.new_game._update_game_state(pins_down=4)
-            # simulate reseting the game called from the views methods
-            self.new_game.reset_game()
-            self.assertEqual(self.new_game.current_frame, 1)
-            self.assertEqual(self.new_game.current_roll, 1)
-            self.assertEqual(self.new_game.pins_remaining, 10)
-            self.assertEqual(self.new_game.finished, False)
-            self.assertEqual(self.new_game.game_state, expected_state)
-            mocked_simulator.assert_called_once_with()
-
+        self.new_game._update_game_state(pins_down=4)
+        # simulate reseting the game called from the views methods
+        self.new_game.reset_game()
+        self.assertEqual(self.new_game.current_frame, 1)
+        self.assertEqual(self.new_game.current_roll, 1)
+        self.assertEqual(self.new_game.pins_remaining, 10)
+        self.assertEqual(self.new_game.finished, False)
+        self.assertEqual(self.new_game.game_state, expected_state)
 
     def test_recalculate_frame_scores_spare_scored(self):
         """Test frame scores are properly updated when spare is scored
@@ -131,11 +134,11 @@ class TestBowlGame(unittest.TestCase):
         in a frame.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': '7', 'roll_1': 3, 'frame_score': 10},
-        'Frame_2': {'roll_2': '6', 'roll_1': 4, 'frame_score': 10}}
+            'Frame_1': {'roll_2': '7', 'roll_1': 3, 'frame_score': 10},
+            'Frame_2': {'roll_2': '6', 'roll_1': 4, 'frame_score': 10}}
         expected_state = {
-        'Frame_1': {'roll_2': '7', 'roll_1': 3, 'frame_score': 14},
-        'Frame_2': {'roll_2': '6', 'roll_1': 4, 'frame_score': 10}}
+            'Frame_1': {'roll_2': '7', 'roll_1': 3, 'frame_score': 14},
+            'Frame_2': {'roll_2': '6', 'roll_1': 4, 'frame_score': 10}}
         self.new_game._recalculate_frame_scores()
         self.assertEqual(self.new_game.game_state, expected_state)
 
@@ -145,11 +148,11 @@ class TestBowlGame(unittest.TestCase):
         in a frame.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_2': {'roll_2': 3, 'roll_1': 5, 'frame_score': 8}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_2': {'roll_2': 3, 'roll_1': 5, 'frame_score': 8}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 18},
-        'Frame_2': {'roll_2': 3, 'roll_1': 5, 'frame_score': 8}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 18},
+            'Frame_2': {'roll_2': 3, 'roll_1': 5, 'frame_score': 8}}
         self.new_game._recalculate_frame_scores()
         self.assertEqual(self.new_game.game_state, expected_state)
 
@@ -159,62 +162,146 @@ class TestBowlGame(unittest.TestCase):
         strikes one after another are scored.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
+            'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
         self.new_game._recalculate_frame_scores()
         self.assertEqual(self.new_game.game_state, expected_state)
 
-    def test_recalculate_frame_scores_strike_last_frame(self):
-        """Test frame scores are properly updated when strike
+    def test_update_game_state_strike_last_frame(self):
+        """Test game state is properly updated when strike
         
         is scored in the last frame.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
-        self.new_game._recalculate_frame_scores()
-        self.assertEqual(self.new_game.game_state, expected_state)
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
+            'Frame_3': {'roll_4': 3, 'roll_3': 7, 'roll_2': 0, 'roll_1': 10,
+                        'frame_score': 20}}
+        self.new_game.current_frame = 3
+        self.new_game.current_roll = 1
+        self.new_game._update_game_state(10)
 
-    def test_recalculate_frame_scores_spare_last_frame(self):
-        """Test frame scores are properly updated when spare
-        
+        self.assertEqual(self.new_game.current_roll, 3)
+        self.assertEqual(self.new_game.pins_remaining, 10)
+
+        self.assertEqual(self.new_game.game_state['Frame_3']['roll_3'], 0)
+        self.assertEqual(self.new_game.game_state['Frame_3']['roll_4'], 0)
+        self.assertEqual(self.new_game.game_state['Frame_3']['frame_score'], 10)
+
+        self.new_game._update_game_state(7)
+        self.new_game._update_game_state(3)
+
+        self.assertEqual(self.new_game.game_state, expected_state)
+        self.assertTrue(self.new_game.finished)
+
+    def test_update_game_state_double_strike_last_frame(self):
+        """Test game state is properly updated when strike
+
         is scored in the last frame.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_3': {'roll_2': 0, 'roll_1': 0, 'frame_score': 0}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
-        'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
-        'Frame_3': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10}}
-        self.new_game._recalculate_frame_scores()
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 30},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
+            'Frame_3': {'roll_4': 0, 'roll_3': 10, 'roll_2': 0, 'roll_1': 10,
+                        'frame_score': 20}}
+        self.new_game.current_frame = 3
+        self.new_game.current_roll = 1
+        self.new_game._update_game_state(10)
+
+        self.assertEqual(self.new_game.current_roll, 3)
+        self.assertEqual(self.new_game.pins_remaining, 10)
+
+        self.assertEqual(self.new_game.game_state['Frame_3']['roll_3'], 0)
+        self.assertEqual(self.new_game.game_state['Frame_3']['roll_4'], 0)
+        self.assertEqual(self.new_game.game_state['Frame_3']['frame_score'], 10)
+
+        self.new_game._update_game_state(10)
+
         self.assertEqual(self.new_game.game_state, expected_state)
+        self.assertTrue(self.new_game.finished)
+
+    def test_update_game_state_spare_last_frame(self):
+        """Test game state is properly updated when spare
+
+        is scored in the last frame.
+        """
+        self.new_game.game_state = {
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_3': {'roll_2': 0, 'roll_1': 5, 'frame_score': 5}}
+        expected_state = {
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 25},
+            'Frame_2': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
+            'Frame_3': {'roll_3': 7, 'roll_2': 5, 'roll_1': 5,
+                        'frame_score': 17}}
+        self.new_game.current_frame = 3
+        self.new_game.current_roll = 2
+        self.new_game._update_game_state(5)
+        self.assertEqual(self.new_game.current_roll, 3)
+        self.assertEqual(self.new_game.pins_remaining, 10)
+        self.assertEqual(self.new_game.game_state['Frame_3']['roll_3'], 0)
+        self.assertEqual(self.new_game.game_state['Frame_3']['frame_score'], 10)
+        self.new_game._update_game_state(7)
+        self.assertEqual(self.new_game.game_state, expected_state)
+        self.assertTrue(self.new_game.finished)
 
     def test_present_game_state(self):
-        """Replace strike and spare rolls with 'X' and '/' before 
-        
+        """Replace strike and spare rolls with 'X' and '/' before
+
         showing result to the user.
         """
         self.new_game.game_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 17},
-        'Frame_2': {'roll_2': 3, 'roll_1': 7, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 10, 'frame_score': 17},
+            'Frame_2': {'roll_2': 3, 'roll_1': 7, 'frame_score': 10}}
         expected_state = {
-        'Frame_1': {'roll_2': 0, 'roll_1': 'X', 'frame_score': 17},
-        'Frame_2': {'roll_2': '/', 'roll_1': 7, 'frame_score': 10}}
+            'Frame_1': {'roll_2': 0, 'roll_1': 'X', 'frame_score': 17},
+            'Frame_2': {'roll_2': '/', 'roll_1': 7, 'frame_score': 10}}
         game_state = self.new_game.present_game_state()
         self.assertEqual(game_state, expected_state)
 
+    def test_final_score_according_assignment_example(self):
+        """Test recalculate with game state which failed in manual testing."""
+        self.new_game.game_state = {
+            'Frame_1': {'roll_2': 4, 'roll_1': 1, 'frame_score': 5},
+            'Frame_2': {'roll_2': 4, 'roll_1': 5, 'frame_score': 9},
+            'Frame_3': {'roll_2': 4, 'roll_1': 6, 'frame_score': 10},
+            'Frame_4': {'roll_2': 5, 'roll_1': 5, 'frame_score': 10},
+            'Frame_5': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_6': {'roll_2': 1, 'roll_1': 0, 'frame_score': 1},
+            'Frame_7': {'roll_2': 3, 'roll_1': 7, 'frame_score': 10},
+            'Frame_8': {'roll_2': 4, 'roll_1': 6, 'frame_score': 10},
+            'Frame_9': {'roll_2': 0, 'roll_1': 10, 'frame_score': 10},
+            'Frame_10': {'roll_3': 6, 'roll_2': 8, 'roll_1': 2,
+                         'frame_score': 16}}
+
+        expected_state = {
+            'Frame_1': {'roll_2': 4, 'roll_1': 1, 'frame_score': 5},
+            'Frame_2': {'roll_2': 4, 'roll_1': 5, 'frame_score': 9},
+            'Frame_3': {'roll_2': 4, 'roll_1': 6, 'frame_score': 15},
+            'Frame_4': {'roll_2': 5, 'roll_1': 5, 'frame_score': 20},
+            'Frame_5': {'roll_2': 0, 'roll_1': 10, 'frame_score': 11},
+            'Frame_6': {'roll_2': 1, 'roll_1': 0, 'frame_score': 1},
+            'Frame_7': {'roll_2': 3, 'roll_1': 7, 'frame_score': 16},
+            'Frame_8': {'roll_2': 4, 'roll_1': 6, 'frame_score': 20},
+            'Frame_9': {'roll_2': 0, 'roll_1': 10, 'frame_score': 20},
+            'Frame_10': {'roll_3': 6, 'roll_2': 8, 'roll_1': 2,
+                         'frame_score': 16}}
+        self.new_game._recalculate_frame_scores()
+        self.assertEqual(self.new_game.game_state, expected_state)
+        self.assertEqual(self.new_game.get_total_score(), 133)
 
 if __name__ == '__main__':
     unittest.main()

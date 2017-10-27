@@ -73,33 +73,23 @@ class BowlGameSimulator(object):
         In the last frame spares and strikes scored do not require frame score
         update.
         """
-        for frame_num in range(1, len(self.game_state) + 1):
-            if frame_num < len(self.game_state):
+        for frame_num in range(1, len(self.game_state)):
+            if self.game_state['Frame_{}'.format(frame_num)][
+                'frame_score'] == 10:
                 if self.game_state['Frame_{}'.format(frame_num)][
-                    'frame_score'] == 10:
-                    if self.game_state['Frame_{}'.format(frame_num)][
+                    'roll_1'] == 10:
+                    # Strike rolled
+                    if self.game_state['Frame_{}'.format(frame_num + 1)][
                         'roll_1'] == 10:
-                        # Strike rolled
-                        if self.game_state['Frame_{}'.format(frame_num + 1)][
-                            'roll_1'] == 10:
-                            if frame_num + 2 <= len(self.game_state):
-                                self.game_state['Frame_{}'.format(frame_num)][
-                                    'frame_score'] += \
-                                    self.game_state[
-                                        'Frame_{}'.format(frame_num + 1)][
-                                        'roll_1'] + \
-                                    self.game_state[
-                                        'Frame_{}'.format(frame_num + 2)][
-                                        'roll_1']
-                            else:
-                                self.game_state['Frame_{}'.format(frame_num)][
-                                    'frame_score'] += \
-                                    self.game_state[
-                                        'Frame_{}'.format(frame_num + 1)][
-                                        'roll_1'] + \
-                                    self.game_state[
-                                        'Frame_{}'.format(frame_num + 1)][
-                                        'roll_2']
+                        if frame_num + 2 <= len(self.game_state):
+                            self.game_state['Frame_{}'.format(frame_num)][
+                                'frame_score'] += \
+                                self.game_state[
+                                    'Frame_{}'.format(frame_num + 1)][
+                                    'roll_1'] + \
+                                self.game_state[
+                                    'Frame_{}'.format(frame_num + 2)][
+                                    'roll_1']
                         else:
                             self.game_state['Frame_{}'.format(frame_num)][
                                 'frame_score'] += \
@@ -107,13 +97,22 @@ class BowlGameSimulator(object):
                                     'Frame_{}'.format(frame_num + 1)][
                                     'roll_1'] + \
                                 self.game_state[
-                                    'Frame_{}'.format(frame_num + 1)]['roll_2']
+                                    'Frame_{}'.format(frame_num + 1)][
+                                    'roll_2']
                     else:
-                        # Spare rolled
                         self.game_state['Frame_{}'.format(frame_num)][
                             'frame_score'] += \
-                            self.game_state['Frame_{}'.format(frame_num + 1)][
-                                "roll_1"]
+                            self.game_state[
+                                'Frame_{}'.format(frame_num + 1)][
+                                'roll_1'] + \
+                            self.game_state[
+                                'Frame_{}'.format(frame_num + 1)]['roll_2']
+                else:
+                    # Spare rolled
+                    self.game_state['Frame_{}'.format(frame_num)][
+                        'frame_score'] += \
+                        self.game_state['Frame_{}'.format(frame_num + 1)][
+                            "roll_1"]
 
     def _update_game_state(self, pins_down):
         """Updates game state - current frame, roll, frame_score.
@@ -125,15 +124,50 @@ class BowlGameSimulator(object):
             'roll_{}'.format(self.current_roll)] = pins_down
         self.game_state['Frame_{}'.format(self.current_frame)][
             'frame_score'] += pins_down
-        if pins_down == 10 or self.current_roll == 2:
-            self.current_frame += 1
-            self.current_roll = 1
-            self.pins_remaining = 10
-            self._recalculate_frame_scores()
-            if self.current_frame > 10:
-                # Game Over! Open the result page and reset the game.
-                self.finished = True
+        if self.current_frame < len(self.game_state):
+            if pins_down == 10 or self.current_roll == 2:
+                self.current_frame += 1
+                self.current_roll = 1
+                self.pins_remaining = 10
+                self._recalculate_frame_scores()
+            else:
+                self.current_roll += 1
+                self.pins_remaining -= pins_down
+                self._recalculate_frame_scores()
         else:
-            self.current_roll += 1
-            self.pins_remaining -= pins_down
+            max_rolls = 2
+            if pins_down == 10:
+                if self.current_roll == 1:
+                    # Strike scored in last frame add 2 more rolls to the frame
+                    self.game_state['Frame_{}'.format(self.current_frame)]['roll_3'] = 0
+                    self.game_state['Frame_{}'.format(self.current_frame)]['roll_4'] = 0
+                    # skip second roll
+                    self.current_roll = 3
+                    self.pins_remaining = 10
+                    max_rolls = 4
+                    self._recalculate_frame_scores()
+                else:
+                    self.current_roll += 1
+                    self.pins_remaining = 10
+                    if self.current_roll > max_rolls:
+                        # Game Over! Open the result page and reset the game.
+                        self._recalculate_frame_scores()
+                        self.finished = True
+
+            elif self.current_roll == 2:
+                if self.game_state['Frame_{}'.format(self.current_frame)]['roll_1'] + self.game_state['Frame_{}'.format(self.current_frame)]['roll_2'] == 10:
+                    # Spare scored in last frame add 1 more rolls to the frame
+                    self.game_state['Frame_{}'.format(self.current_frame)]['roll_3'] = 0
+                    self.pins_remaining = 10
+                    self.current_roll += 1
+                    max_rolls = 3
+                    self._recalculate_frame_scores()
+
+            else:
+                self.current_roll += 1
+                self.pins_remaining -= pins_down
+                if self.current_roll > max_rolls:
+                    # Game Over! Open the result page and reset the game.
+                    self._recalculate_frame_scores()
+                    self.finished = True
 
